@@ -17,7 +17,16 @@ export const fetchTodos = createAsyncThunk(
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/todos?_limit=10"
       );
-    } catch (error) {}
+
+      if (!response.ok) {
+        throw new Error("Server error");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
   }
 );
 
