@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppDispatch } from "../hooks/hooks";
-import { removeTodo, toggleComplete } from "../redux/slices/todoSlice";
+import { toggleStatus } from "../redux/slices/todoSlice";
 
 interface ITodoItemProps {
   id: string;
@@ -20,7 +20,7 @@ export const TodoItem: React.FC<ITodoItemProps> = ({
       <input
         type="checkbox"
         checked={completed}
-        onChange={() => dispatch(toggleComplete(id))}
+        onChange={() => dispatch(toggleStatus(id))}
       />
       <span>{title}</span>
       <span onClick={() => dispatch(removeTodo(id))}>x</span>

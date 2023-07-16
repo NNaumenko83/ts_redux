@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import React, { useState, useEffect } from "react";
+
 import "./App.css";
 import { NewTodoForm } from "./components/NewTodoForm";
 import { TodoList } from "./components/TodoList";
-import { todoAdded } from "./redux/slices/todoSlice";
+// import { todoAdded } from "./redux/slices/todoSlice";
 import { useAppDispatch } from "./hooks/hooks";
+import { fetchTodos, addNewTodo } from "./redux/slices/todoSlice";
 
 function App() {
   const [text, setText] = useState("");
@@ -12,10 +13,14 @@ function App() {
 
   const handleAction = () => {
     if (text.trim().length) {
-      dispatch(todoAdded(text));
+      dispatch(addNewTodo(text));
       setText("");
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchTodos);
+  }, [dispatch]);
 
   return (
     <div className="App">
