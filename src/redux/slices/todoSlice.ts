@@ -1,4 +1,9 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  AnyAction,
+} from "@reduxjs/toolkit";
 
 type Todo = {
   id: string;
@@ -17,6 +22,7 @@ export const fetchTodos = createAsyncThunk<
   undefined,
   { rejectValue: string }
 >("todos/fetchTodos", async (_, { rejectWithValue }) => {
+  console.log("fetch");
   const response = await fetch(
     "https://jsonplaceholder.typicode.com/todos?_limit=10"
   );
@@ -59,7 +65,7 @@ export const toggleStatus = createAsyncThunk<
   Todo,
   string,
   { rejectValue: string; state: { todos: TodosState } }
->("todos/toggleStatus", async (id, { rejectWithValue, dispatch, getState }) => {
+>("todos/toggleStatus", async (id, { rejectWithValue, getState }) => {
   const todo = getState().todos.list.find((todo) => todo.id === id);
 
   if (todo) {
@@ -80,6 +86,25 @@ export const toggleStatus = createAsyncThunk<
   }
 
   return rejectWithValue("No such todo in the list!");
+});
+
+export const deleteTodo = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("todos/deleteTodo", async (id, { rejectWithValue }) => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/todos/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  if (!response.ok) {
+    return rejectWithValue("Can't delete task. Server error");
+  }
+
+  return id;
 });
 
 const initialState: TodosState = {
@@ -117,6 +142,13 @@ const todoSlice = createSlice({
         if (toggledTodo) {
           toggledTodo.completed = !toggledTodo.completed;
         }
+      })
+      .addCase(deleteTodo.fulfilled, (state, action) => {
+        state.list = state.list.filter((todo) => todo.id !== action.payload);
+      })
+      .addMatcher(isError, (state, action: PayloadAction<string>) => {
+        state.error = action.payload;
+        state.loading = false;
       });
   },
   reducers: {
@@ -142,3 +174,7 @@ const todoSlice = createSlice({
 // export const { todoAdded, toggleComplete, removeTodo } = todoSlice.actions;
 
 export default todoSlice.reducer;
+
+function isError(action: AnyAction) {
+  return action.type.endsWith("rejected");
+}

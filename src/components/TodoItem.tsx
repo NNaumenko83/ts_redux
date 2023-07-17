@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppDispatch } from "../hooks/hooks";
-import { toggleStatus } from "../redux/slices/todoSlice";
+import { toggleStatus, deleteTodo } from "../redux/slices/todoSlice";
 
 interface ITodoItemProps {
   id: string;
@@ -23,7 +23,7 @@ export const TodoItem: React.FC<ITodoItemProps> = ({
         onChange={() => dispatch(toggleStatus(id))}
       />
       <span>{title}</span>
-      <span onClick={() => dispatch(removeTodo(id))}>x</span>
+      <span onClick={() => dispatch(deleteTodo(id))}>x</span>
     </li>
   );
 };
