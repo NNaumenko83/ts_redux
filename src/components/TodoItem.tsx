@@ -1,29 +1,29 @@
 import React from "react";
+import { Todo } from "../types/types";
 import { useAppDispatch } from "../hooks/hooks";
-import { toggleStatus, deleteTodo } from "../redux/slices/todoSlice";
+import { addTask, toggleStatus, deleteTask } from "../redux/slices/todoSlice";
 
-interface ITodoItemProps {
-  id: string;
-  title: string;
-  completed: boolean;
-}
-
-export const TodoItem: React.FC<ITodoItemProps> = ({
-  id,
-  title,
-  completed,
-}) => {
+export const TodoItem: React.FC<Todo> = ({ completed, title, id }) => {
   const dispatch = useAppDispatch();
+  const onDeleteTodoButtonClick = () => {
+    dispatch(deleteTask(id));
+  };
+
+  const toggleCompleteHandler: React.ChangeEventHandler<
+    HTMLInputElement
+  > = (): void => {
+    dispatch(toggleStatus(id));
+  };
 
   return (
-    <li>
+    <div>
       <input
         type="checkbox"
         checked={completed}
-        onChange={() => dispatch(toggleStatus(id))}
+        onChange={toggleCompleteHandler}
       />
-      <span>{title}</span>
-      <span onClick={() => dispatch(deleteTodo(id))}>x</span>
-    </li>
+      {title}
+      <button onClick={onDeleteTodoButtonClick}>x</button>
+    </div>
   );
 };
