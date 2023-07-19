@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../hooks/hooks";
 import { addTask } from "../redux/slices/todoSlice";
+import { useAppDispatch } from "../hooks/hooks";
 
-export const NewTodoForm: React.FC = () => {
+export const NewTodoForm = () => {
   const [value, setValue] = useState("");
   const dispatch = useAppDispatch();
 
@@ -10,9 +10,7 @@ export const NewTodoForm: React.FC = () => {
     setValue(e.target.value);
   };
 
-  const onAddTaskButtonClick: React.MouseEventHandler<
-    HTMLButtonElement
-  > = (): void => {
+  const onAddTodoHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
     dispatch(addTask(value));
     setValue("");
   };
@@ -20,8 +18,10 @@ export const NewTodoForm: React.FC = () => {
   return (
     <div>
       NewTodoForm
-      <input type="text" value={value} onChange={onChangeHandler} />
-      <button onClick={onAddTaskButtonClick}>Add todo</button>
+      <input type="text" onChange={onChangeHandler} value={value} />
+      <button type="button" onClick={onAddTodoHandler}>
+        Add task
+      </button>
     </div>
   );
 };
