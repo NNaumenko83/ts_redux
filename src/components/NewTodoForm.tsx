@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addTask } from "../redux/slices/todoSlice";
+import { addTask } from "../redux/todoSlice";
 import { useAppDispatch } from "../hooks/hooks";
 
 export const NewTodoForm = () => {

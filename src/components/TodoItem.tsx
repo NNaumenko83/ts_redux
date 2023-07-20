@@ -1,9 +1,9 @@
 import React from "react";
 import { Todo } from "../types/types";
 import { useAppDispatch } from "../hooks/hooks";
-import { removeTask, toggleCompleted } from "../redux/slices/todoSlice";
+import { removeTask, toggleCompleted } from "../redux/todoSlice";
 
-export const TodoItem: React.FC<Todo> = ({ completed, id, title }) => {
+export const TodoItem = ({ completed, id, title }: Todo) => {
   const dispatch = useAppDispatch();
 
   const onDeleteButtonClick: React.MouseEventHandler<

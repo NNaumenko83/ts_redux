@@ -1,14 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Todo } from "../../types/types";
+import { Todo } from "../types/types";
+import { getTodos } from "./operations";
 
 // Define a type for the slice state
 export interface TodoState {
   list: Todo[];
+  isLoading: boolean;
+  error: string;
 }
 
 // Define the initial state using that type
 const initialState: TodoState = {
   list: [],
+  isLoading: false,
+  error: "",
 };
 
 export const todoSlice = createSlice({
@@ -35,6 +40,23 @@ export const todoSlice = createSlice({
         toggledTodo.completed = !toggledTodo.completed;
       }
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(getTodos.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = "";
+      })
+      .addCase(getTodos.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.list = action.payload;
+      })
+      .addCase(getTodos.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.error.message) {
+          state.error = action.error.message;
+        }
+      });
   },
 });
 
