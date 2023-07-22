@@ -1,7 +1,8 @@
 import React from "react";
 import { Todo } from "../types/types";
 import { useAppDispatch } from "../hooks/hooks";
-import { removeTask, toggleCompleted } from "../redux/todoSlice";
+// import { removeTask } from "../redux/todoSlice";
+import { toggleStatus, removeTodo } from "../redux/operations";
 
 export const TodoItem = ({ completed, id, title }: Todo) => {
   const dispatch = useAppDispatch();
@@ -9,13 +10,7 @@ export const TodoItem = ({ completed, id, title }: Todo) => {
   const onDeleteButtonClick: React.MouseEventHandler<
     HTMLButtonElement
   > = () => {
-    dispatch(removeTask(id));
-  };
-
-  const toggleStatusHandler: React.ChangeEventHandler<
-    HTMLInputElement
-  > = () => {
-    dispatch(toggleCompleted(id));
+    dispatch(removeTodo(id));
   };
 
   return (
@@ -23,7 +18,7 @@ export const TodoItem = ({ completed, id, title }: Todo) => {
       <input
         type="checkbox"
         checked={completed}
-        onChange={toggleStatusHandler}
+        onChange={() => dispatch(toggleStatus(id))}
       />
       <span>{title}</span>
       <button type="button" onClick={onDeleteButtonClick}>

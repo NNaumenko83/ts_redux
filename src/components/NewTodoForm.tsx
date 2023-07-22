@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { addTask } from "../redux/todoSlice";
+
 import { useAppDispatch } from "../hooks/hooks";
+import { addNewTodo } from "../redux/operations";
 
 export const NewTodoForm = () => {
   const [value, setValue] = useState("");
@@ -11,7 +12,7 @@ export const NewTodoForm = () => {
   };
 
   const onAddTodoHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-    dispatch(addTask(value));
+    dispatch(addNewTodo(value));
     setValue("");
   };
 
